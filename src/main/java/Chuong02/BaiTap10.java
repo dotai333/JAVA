@@ -83,5 +83,4 @@ public class BaiTap10 {
         return (double)s/a.length;
     }
 }
-    }
-}
+
