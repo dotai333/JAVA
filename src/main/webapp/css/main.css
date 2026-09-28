@@ -1,0 +1,458 @@
+:root {
+    --sidebar-width: 260px;
+    --sidebar-bg: linear-gradient(180deg, #0f172a 0%, #1e1b4b 100%);
+    --accent-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    --accent-color: #6366f1;
+    --bg-light: #f1f5f9;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--bg-light);
+    color: #334155;
+    overflow-x: hidden;
+}
+
+/* Sidebar */
+#sidebar {
+    width: var(--sidebar-width);
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: var(--sidebar-bg);
+    color: #fff;
+    transition: all 0.3s;
+    z-index: 1000;
+    box-shadow: 4px 0 25px rgba(0,0,0,0.12);
+}
+
+#sidebar .sidebar-header {
+    padding: 22px 20px;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+#sidebar ul.components {
+    padding: 15px 0;
+}
+
+#sidebar ul li a {
+    padding: 13px 20px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    color: #94a3b8;
+    text-decoration: none;
+    border-radius: 12px;
+    margin: 4px 14px;
+    transition: all 0.25s ease;
+}
+
+#sidebar ul li a:hover {
+    color: #fff;
+    background: rgba(255,255,255,0.08);
+    transform: translateX(4px);
+}
+
+#sidebar ul li.active > a {
+    color: #fff;
+    background: var(--accent-gradient);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+}
+
+#sidebar ul li a i {
+    margin-right: 14px;
+    width: 22px;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+/* Content Area */
+#content {
+    margin-left: var(--sidebar-width);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s;
+}
+
+.main-body {
+    flex: 1;
+}
+
+/* Top Navbar */
+.top-navbar {
+    background-color: #ffffff;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.03);
+    padding: 16px 32px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+/* Tab Control */
+.tab-content-section {
+    display: none;
+}
+
+.tab-content-section.active {
+    display: block;
+}
+
+/* Table Custom */
+.table-custom {
+    background-color: #ffffff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    border: 1px solid #e2e8f0;
+}
+
+.table-custom th {
+    background-color: #f8fafc;
+    color: #475569;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.78rem;
+    letter-spacing: 0.5px;
+    padding: 16px 20px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.table-custom td {
+    padding: 16px 20px;
+    vertical-align: middle;
+    color: #334155;
+    font-size: 0.92rem;
+}
+
+/* Badges & Buttons */
+.btn-gradient {
+    background: var(--accent-gradient);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 22px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    transition: all 0.25s ease;
+}
+
+.btn-gradient:hover {
+    color: white;
+    box-shadow: 0 6px 18px rgba(99, 102, 241, 0.45);
+    transform: translateY(-1px);
+}
+
+.badge-soft-primary { background-color: #e0e7ff; color: #4338ca; }
+.badge-soft-success { background-color: #d1fae5; color: #047857; }
+.badge-soft-warning { background-color: #fef3c7; color: #b45309; }
+.badge-soft-danger { background-color: #ffe4e6; color: #be123c; }
+.badge-soft-info { background-color: #cff4fc; color: #055160; }
+.style-card-primary,
+.style-card-success,
+.style-card-warning,
+.style-card-info {
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.stat-icon {
+    transition: transform 0.3s ease-in-out;
+}
+.table-custom .btn-light {
+    transition: all 0.2s ease-in-out;
+    border-radius: 8px;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid transparent;
+}
+
+/* 1. Hover vào Nút Sửa (Màu cam/vàng) */
+.table-custom .btn-light.text-warning:hover {
+    background-color: #f59e0b !important;
+    color: #ffffff !important;
+    border-color: #f59e0b;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(245, 158, 11, 0.35);
+}
+
+/* 2. Hover vào Nút Xóa (Màu đỏ) */
+.table-custom .btn-light.text-danger:hover {
+    background-color: #ef4444 !important;
+    color: #ffffff !important;
+    border-color: #ef4444;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(239, 68, 68, 0.35);
+}
+
+/* Hiệu ứng khi click chìm xuống */
+.table-custom .btn-light:active {
+    transform: translateY(0) scale(0.95);
+}
+
+/* 1. Khi rê chuột vào Card: Đẩy card lên & tạo bóng sâu hơn */
+.style-card-primary:hover,
+.style-card-success:hover,
+.style-card-warning:hover,
+.style-card-info:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* 2. Khi rê chuột vào Card: Phóng to nhẹ và nghiêng Icon */
+.style-card-primary:hover .stat-icon,
+.style-card-success:hover .stat-icon,
+.style-card-warning:hover .stat-icon,
+.style-card-info:hover .stat-icon {
+    transform: scale(1.15) rotate(6deg);
+}
+.card-stat {
+    border: none;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.04);
+}
+.stat-primary { border-top: 4px solid #6366f1; }
+.stat-success { border-top: 4px solid #10b981; }
+.stat-warning { border-top: 4px solid #f59e0b; }
+.stat-info { border-top: 4px solid #06b6d4; }
+
+.icon-box {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+}
+.main-content {
+    margin-left: 260px; /* Sukatan no sabali ti lakang ti Sidebar-mo */
+    width: calc(100% - 260px);
+}
+.sidebar {
+    width: 260px;
+    flex-shrink: 0; /* Saan a mangipalubos a maasag wenno magipit ti sidebar */
+}
+/* Container bao bọc */
+.search-box-inside {
+    position: relative;
+    width: 280px;
+}
+
+/* Ô input chính */
+.search-input-inside {
+    width: 100%;
+    padding: 8px 38px 8px 14px; /* Padding-right lớn (38px) để chữ không đè lên icon */
+    font-size: 14px;
+    border: 1px solid #ced4da;
+    border-radius: 20px; /* Bo tròn viền kiểu capsule */
+    outline: none;
+    background-color: #f8f9fa;
+    transition: all 0.25s ease;
+}
+
+/* Hiệu ứng Focus */
+.search-input-inside:focus {
+    background-color: #ffffff;
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+}
+
+/* Biểu tượng kính lúp căn lề bên phải */
+.search-icon-right {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+    pointer-events: none; /* Tránh cản trở thao tác con trỏ chuột trong ô input */
+    font-size: 14px;
+}
+/* Khung chứa nhóm tìm kiếm */
+.custom-search-group {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Ô nhập liệu */
+.custom-search-group .search-input {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border: 1px solid #ced4da;
+    border-right: none;
+    padding: 8px 14px;
+    font-size: 14px;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Hiệu ứng khi click vào ô input */
+.custom-search-group .search-input:focus {
+    border-color: #0d6efd;
+    box-shadow: none;
+}
+
+.custom-search-group .search-input:focus + .btn-search {
+    border-color: #0d6efd;
+}
+
+/* Nút tìm kiếm bên phải */
+.custom-search-group .btn-search {
+    background-color: #0d6efd;
+    color: #ffffff;
+    border: 1px solid #0d6efd;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.custom-search-group .btn-search:hover {
+    background-color: #0b5ed7;
+    color: #ffffff;
+}
+.modal-content.custom-form-modal {
+    border: none;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+/* Header Gradient màu xanh đẹp mắt */
+.custom-form-modal .modal-header {
+    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+    color: #ffffff;
+    padding: 1.25rem 1.5rem;
+    border-bottom: none;
+}
+
+.custom-form-modal .modal-title {
+    font-size: 1.15rem;
+    letter-spacing: 0.3px;
+}
+
+/* Nhãn Input (Label) */
+.custom-form-modal .form-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.4rem;
+}
+
+/* Khung Input Group */
+.custom-form-modal .input-group {
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.25s ease;
+}
+
+/* Icon đầu ô nhập */
+.custom-form-modal .input-group-text {
+    background-color: #f8f9fa;
+    border-color: #dee2e6;
+    color: #6c757d;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    transition: all 0.25s ease;
+}
+
+/* Ô nhập liệu */
+.custom-form-modal .form-control {
+    border-color: #dee2e6;
+    padding: 0.625rem 0.875rem;
+    font-size: 0.95rem;
+    transition: all 0.25s ease;
+}
+
+/* Hiệu ứng ĐỔI MÀU VIỀN & PHÁT SÁNG khi bấm chọn ô (Focus) */
+.custom-form-modal .input-group:focus-within {
+    box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.15);
+    border-radius: 10px;
+}
+
+.custom-form-modal .input-group:focus-within .input-group-text {
+    border-color: #0d6efd;
+    color: #0d6efd;
+    background-color: #e7f1ff;
+}
+
+.custom-form-modal .input-group:focus-within .form-control {
+    border-color: #0d6efd;
+    box-shadow: none;
+}
+
+/* Chân trang Modal (Footer) */
+.custom-form-modal .modal-footer {
+    background-color: #f8f9fa;
+    border-top: 1px solid #f1f3f5;
+    padding: 1rem 1.5rem;
+}
+
+/* Nút Lưu (Primary Button) với hiệu ứng nổi */
+.custom-form-modal .btn-submit {
+    background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%);
+    color: #ffffff;
+    border: none;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 0.6rem 1.5rem;
+    box-shadow: 0 4px 10px rgba(13, 110, 253, 0.25);
+    transition: all 0.2s ease;
+}
+
+.custom-form-modal .btn-submit:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 15px rgba(13, 110, 253, 0.35);
+    color: #ffffff;
+}
+
+/* Nút Hủy (Cancel Button) */
+.custom-form-modal .btn-cancel {
+    border-radius: 8px;
+    padding: 0.6rem 1.25rem;
+    font-weight: 500;
+    color: #6c757d;
+    background-color: #e9ecef;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+.custom-form-modal .btn-cancel:hover {
+    background-color: #dee2e6;
+    color: #343a40;
+}
+.btn-reload {
+    width: 42px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #f8f9fa;
+    color: #6c757d;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+
+    transition: all 0.2s ease;
+}
+
+.btn-reload:hover {
+    background-color: #e9ecef;
+    color: #212529;
+    border-color: #adb5bd;
+    transform: rotate(-20deg);
+}
+
+.btn-reload:active {
+    transform: scale(0.95);
+}
