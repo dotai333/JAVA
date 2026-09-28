@@ -2,16 +2,21 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <nav id="sidebar">
     
+    <!-- HEADER SIDEBAR -->
     <div class="sidebar-header d-flex align-items-center">
-        <div class="bg-primary bg-gradient p-2 rounded-3 me-3 text-white d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+        <!-- ICON LOGO MẶC ĐỊNH LUÔN HIỆN -->
+        <div class="bg-primary bg-gradient p-2 rounded-3 text-white d-flex align-items-center justify-content-center flex-shrink-0" style="width: 40px; height: 40px;">
             <i class="fa-solid fa-graduation-cap fa-lg"></i>
         </div>
-        <div>
+        
+        <!-- BỌC PHẦN CHỮ TIÊU ĐỀ TRONG SPAN ĐỂ CSS TỰ ĐỘNG ẨN/HIỆN -->
+        <span class="logo-title-box ms-3">
             <h5 class="m-0 font-weight-bold text-white">QLGiaoVu</h5>
             <small class="text-white-50" style="font-size: 0.75rem;">Hệ thống Giáo vụ</small>
-        </div>
+        </span>
     </div>
 
+    <!-- DANH SÁCH MENU -->
     <ul class="list-unstyled components">
         <li class="active">
             <a href="${pageContext.request.contextPath}/dashboard">
@@ -44,10 +49,11 @@
             </a>
         </li>
 
-      
         <c:if test="${sessionScope.currentUser.chucVu == 'ADMIN'}">
             <hr class="text-white-50 my-2 mx-3">
-            <li class="px-3 text-uppercase text-white-50" style="font-size: 0.7rem; letter-spacing: 1px;">Quản trị</li>
+            <li class="px-3 text-uppercase text-white-50 sidebar-admin-title" style="font-size: 0.7rem; letter-spacing: 1px;">
+                <span>Quản trị</span>
+            </li>
             <li>
                 <a href="${pageContext.request.contextPath}/taikhoan">
                     <i class="fa-solid fa-user-shield text-warning"></i>
@@ -55,6 +61,5 @@
                 </a>
             </li>
         </c:if>
-        <!-- ================================================================= -->
     </ul>
 </nav>

@@ -12,77 +12,91 @@ import java.util.Date;
  * @author MSI
  */
 public class DangKy {
-    private String MaSVDK;
-     private String MaMHDK;
-      private Date NgayDK;
-       private double DiemQT;
-       private double DiemThi;
-       private double DiemTK;
+   private String maSV;
+    private String maMH;
+    private Date ngayDK;
+    private double diemQT;
+    private double diemThi;
+    private double diemTK;
 
+    // Constructor không tham số
     public DangKy() {
     }
 
-    public DangKy(String MaSVDK, String MaMHDK, Date NgayDK, double DiemQT, double DiemThi, double DiemTK) {
-        this.MaSVDK = MaSVDK;
-        this.MaMHDK = MaMHDK;
-        this.NgayDK = NgayDK;
-        this.DiemQT = DiemQT;
-        this.DiemThi = DiemThi;
-        this.DiemTK = DiemTK;
+    // Constructor đầy đủ tham số
+    public DangKy(String maSV, String maMH, Date ngayDK, double diemQT, double diemThi, double diemTK) {
+        this.maSV = maSV;
+        this.maMH = maMH;
+        this.ngayDK = ngayDK;
+        this.diemQT = diemQT;
+        this.diemThi = diemThi;
+        this.diemTK = diemTK;
     }
 
-    public String getMaSVDK() {
-        return MaSVDK;
+    // Getter & Setter cho maSV
+    public String getMaSV() {
+        return maSV;
     }
 
-    public void setMaSVDK(String MaSVDK) {
-        this.MaSVDK = MaSVDK;
+    public void setMaSV(String maSV) {
+        this.maSV = maSV;
     }
 
-    public String getMaMHDK() {
-        return MaMHDK;
+    // Getter & Setter cho maMH
+    public String getMaMH() {
+        return maMH;
     }
 
-    public void setMaMHDK(String MaMHDK) {
-        this.MaMHDK = MaMHDK;
+    public void setMaMH(String maMH) {
+        this.maMH = maMH;
     }
 
+    // Getter & Setter cho ngayDK
     public Date getNgayDK() {
-        return NgayDK;
+        return ngayDK;
     }
 
-    public void setNgayDK(Date NgayDK) {
-        this.NgayDK = NgayDK;
+    public void setNgayDK(Date ngayDK) {
+        this.ngayDK = ngayDK;
     }
 
+    // Getter & Setter cho diemQT
     public double getDiemQT() {
-        return DiemQT;
+        return diemQT;
     }
 
-    public void setDiemQT(double DiemQT) {
-        this.DiemQT = DiemQT;
+    public void setDiemQT(double diemQT) {
+        this.diemQT = diemQT;
     }
 
+    // Getter & Setter cho diemThi
     public double getDiemThi() {
-        return DiemThi;
+        return diemThi;
     }
 
-    public void setDiemThi(double DiemThi) {
-        this.DiemThi = DiemThi;
+    public void setDiemThi(double diemThi) {
+        this.diemThi = diemThi;
     }
 
+    // Getter & Setter cho diemTK
     public double getDiemTK() {
-        return DiemTK;
+        return diemTK;
     }
 
-    public void setDiemTK(double DiemTK) {
-        this.DiemTK = DiemTK;
+    public void setDiemTK(double diemTK) {
+        this.diemTK = diemTK;
     }
 
+    // Phương thức toString phục vụ In / Debug
     @Override
     public String toString() {
-        return "DangKy{" + "MaSVDK=" + MaSVDK + ", MaMHDK=" + MaMHDK + ", NgayDK=" + NgayDK + ", DiemQT=" + DiemQT + ", DiemThi=" + DiemThi + ", DiemTK=" + DiemTK + '}';
+        return "DangKy{" +
+               "maSV='" + maSV + '\'' +
+               ", maMH='" + maMH + '\'' +
+               ", ngayDK=" + ngayDK +
+               ", diemQT=" + diemQT +
+               ", diemThi=" + diemThi +
+               ", diemTK=" + diemTK +
+               '}';
     }
-
-   
 }

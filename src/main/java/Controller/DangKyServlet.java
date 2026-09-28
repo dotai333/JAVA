@@ -18,7 +18,7 @@ import jakarta.servlet.http.HttpServletResponse;
         urlPatterns = {"/DangKyServlet", "/dangky"})
 public class DangKyServlet extends HttpServlet {
 
-    private DangKyDao dkDao = new DangKyDao();
+   private DangKyDao dkDao = new DangKyDao();
     private SinhVienDao svDao = new SinhVienDao();
     private MonHocDAO mhDao = new MonHocDAO();
 
@@ -36,9 +36,8 @@ public class DangKyServlet extends HttpServlet {
         try {
             switch (action) {
                 case "list":
-                    List<DangKyView> list = dkDao.findAll();
-                    request.setAttribute("dsDangKy", list);
-                    request.getRequestDispatcher("/view/dangky.jsp").forward(request, response);
+                case "search":
+                    hienThiDanhSachPhanTrang(request, response);
                     break;
                 case "add":
                     request.setAttribute("isEdit", false);
@@ -64,22 +63,10 @@ public class DangKyServlet extends HttpServlet {
                     boolean isDeleted = dkDao.delete(maSVDel, maMHDel);
 
                     if (isDeleted) {
-
                         response.sendRedirect("dangky?action=list&message=deleted");
                     } else {
-
                         response.sendRedirect("dangky?action=list&error=fail");
                     }
-                    break;
-                case "search":
-                    String keyword = request.getParameter("keyword");
-                    if (keyword == null) {
-                        keyword = "";
-                    }
-                    List<DangKyView> searchList = dkDao.search(keyword);
-                    request.setAttribute("dsDangKy", searchList);
-                    request.setAttribute("keyword", keyword);
-                    request.getRequestDispatcher("/view/dangky.jsp").forward(request, response);
                     break;
                 default:
                     response.sendRedirect("dangky?action=list");
@@ -89,6 +76,57 @@ public class DangKyServlet extends HttpServlet {
             e.printStackTrace();
             throw new ServletException("Lỗi Servlet DangKy (GET): " + e.getMessage(), e);
         }
+    }
+
+    /**
+     * Hàm dùng chung xử lý hiển thị danh sách có Phân trang & Tìm kiếm
+     */
+    private void hienThiDanhSachPhanTrang(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        
+        // 1. Lấy trang hiện tại (mặc định trang 1)
+        int page = 1;
+        String pageStr = request.getParameter("page");
+        if (pageStr != null && !pageStr.trim().isEmpty()) {
+            try {
+                page = Integer.parseInt(pageStr);
+            } catch (NumberFormatException e) {
+                page = 1;
+            }
+        }
+
+        // 2. Cấu hình số dòng mỗi trang
+        int pageSize = 10;
+
+        // 3. Lấy từ khóa tìm kiếm
+        String keyword = request.getParameter("keyword");
+        if (keyword == null) {
+            keyword = "";
+        }
+
+        try {
+            // 4. Gọi DAO lấy danh sách phân trang và đếm số lượng tổng
+            List<DangKyView> list = dkDao.findByPageAndKeyword(keyword, page, pageSize);
+            int totalRecords = dkDao.countByKeyword(keyword);
+
+            // 5. Tính tổng số trang
+            int totalPages = (int) Math.ceil((double) totalRecords / pageSize);
+
+            // 6. Đẩy toàn bộ thuộc tính sang JSP
+            request.setAttribute("dsDangKy", list);
+            request.setAttribute("currentPage", page);
+            request.setAttribute("totalPages", totalPages);
+            request.setAttribute("totalRecords", totalRecords);
+            request.setAttribute("pageSize", pageSize);
+            request.setAttribute("keyword", keyword);
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            throw new ServletException("Lỗi kết nối CSDL hoặc Driver DB: " + e.getMessage(), e);
+        }
+
+        // 7. Forward sang JSP
+        request.getRequestDispatcher("/view/dangky.jsp").forward(request, response);
     }
 
     @Override
@@ -108,7 +146,6 @@ public class DangKyServlet extends HttpServlet {
                     String maSV = request.getParameter("maSV");
                     String maMH = request.getParameter("maMH");
                     if (dkDao.exists(maSV, maMH)) {
-                        
                         response.sendRedirect("dangky?action=add&error=duplicate");
                         break; 
                     }
@@ -117,10 +154,9 @@ public class DangKyServlet extends HttpServlet {
 
                     double diemQT = request.getParameter("diemQT") != null && !request.getParameter("diemQT").isEmpty() ? Double.parseDouble(request.getParameter("diemQT")) : 0.0;
                     double diemThi = request.getParameter("diemThi") != null && !request.getParameter("diemThi").isEmpty() ? Double.parseDouble(request.getParameter("diemThi")) : 0.0;
-                    double diemTK = request.getParameter("diemTK") != null && !request.getParameter("diemTK").isEmpty() ? Double.parseDouble(request.getParameter("diemTK")) : 0.0;
-                    diemTK = (diemQT * 0.4) + (diemThi * 0.6);
-
+                    double diemTK = (diemQT * 0.4) + (diemThi * 0.6);
                     diemTK = Math.round(diemTK * 100.0) / 100.0;
+
                     DangKyView dk = new DangKyView(maSV, maMH, ngayDK, diemQT, diemThi, diemTK, "", "");
                     dkDao.insert(dk);
                     response.sendRedirect("dangky?action=list&message=added");
@@ -134,12 +170,12 @@ public class DangKyServlet extends HttpServlet {
 
                     double diemQT = request.getParameter("diemQT") != null && !request.getParameter("diemQT").isEmpty() ? Double.parseDouble(request.getParameter("diemQT")) : 0.0;
                     double diemThi = request.getParameter("diemThi") != null && !request.getParameter("diemThi").isEmpty() ? Double.parseDouble(request.getParameter("diemThi")) : 0.0;
-                    double diemTK = request.getParameter("diemTK") != null && !request.getParameter("diemTK").isEmpty() ? Double.parseDouble(request.getParameter("diemTK")) : 0.0;
-                    diemTK = (diemQT * 0.4) + (diemThi * 0.6);
+                    double diemTK = (diemQT * 0.4) + (diemThi * 0.6);
                     diemTK = Math.round(diemTK * 100.0) / 100.0;
+
                     DangKyView dk = new DangKyView(maSV, maMH, ngayDK, diemQT, diemThi, diemTK, "", "");
                     dkDao.update(dk);
-                    response.sendRedirect("dangky?action=list&message=added");
+                    response.sendRedirect("dangky?action=list&message=updated");
                     break;
                 }
                 default:
