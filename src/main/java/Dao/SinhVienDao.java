@@ -14,7 +14,7 @@ public class SinhVienDao {
 
     public List<SinhVien> findAll() throws ClassNotFoundException {
         List<SinhVien> ds = new ArrayList<>();
-        String sql = "SELECT * FROM SINHVIEN";
+        String sql = "SELECT MaSV, HoTen, NgaySinh, GioiTinh, DiaChi, MaKhoa FROM SINHVIEN";
 
         try (Connection conn = DBConnection.getConnection(); 
              PreparedStatement ps = conn.prepareStatement(sql); 
@@ -43,8 +43,7 @@ public class SinhVienDao {
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, maSV);
-            int rows = ps.executeUpdate();
-            return rows > 0;
+            return ps.executeUpdate() > 0;
 
         } catch (SQLException e) {
             System.out.println("Lỗi khi xóa dữ liệu: " + e.getMessage());
@@ -53,7 +52,7 @@ public class SinhVienDao {
     }
 
     public SinhVien findById(String maSV) throws ClassNotFoundException {
-        String sql = "SELECT * FROM SINHVIEN WHERE MaSV=?";
+        String sql = "SELECT MaSV, HoTen, NgaySinh, GioiTinh, DiaChi, MaKhoa FROM SINHVIEN WHERE MaSV=?";
 
         try (Connection conn = DBConnection.getConnection(); 
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -78,20 +77,25 @@ public class SinhVienDao {
     }
 
     public boolean insert(SinhVien sv) {
-        String sql = "INSERT INTO SINHVIEN VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO SINHVIEN (MaSV, HoTen, NgaySinh, GioiTinh, DiaChi, MaKhoa) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DBConnection.getConnection(); 
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, sv.getMaSV());
             ps.setString(2, sv.getHoTen());
-            ps.setDate(3, new java.sql.Date(sv.getNgaySinh().getTime()));
+            
+            if (sv.getNgaySinh() != null) {
+                ps.setDate(3, new java.sql.Date(sv.getNgaySinh().getTime()));
+            } else {
+                ps.setDate(3, null);
+            }
+            
             ps.setBoolean(4, sv.isGioiTinh());
             ps.setString(5, sv.getDiaChi());
             ps.setString(6, sv.getMaKhoa());
 
-            int rows = ps.executeUpdate();
-            return rows > 0;
+            return ps.executeUpdate() > 0;
 
         } catch (Exception e) {
             System.out.println("Lỗi khi thêm dữ liệu: " + e.getMessage());
@@ -106,14 +110,19 @@ public class SinhVienDao {
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, sv.getHoTen());
-            ps.setDate(2, new java.sql.Date(sv.getNgaySinh().getTime()));
+            
+            if (sv.getNgaySinh() != null) {
+                ps.setDate(2, new java.sql.Date(sv.getNgaySinh().getTime()));
+            } else {
+                ps.setDate(2, null);
+            }
+            
             ps.setBoolean(3, sv.isGioiTinh());
             ps.setString(4, sv.getDiaChi());
             ps.setString(5, sv.getMaKhoa());
             ps.setString(6, sv.getMaSV());
 
-            int rows = ps.executeUpdate();
-            return rows > 0;
+            return ps.executeUpdate() > 0;
 
         } catch (Exception e) {
             System.out.println("Lỗi khi cập nhật dữ liệu: " + e.getMessage());
@@ -123,24 +132,27 @@ public class SinhVienDao {
 
     public List<SinhVien> findByName(String name) throws ClassNotFoundException {
         List<SinhVien> ds = new ArrayList<>();
-        String sql = "SELECT * FROM SINHVIEN WHERE HoTen LIKE ? OR MaSV LIKE ? OR DiaChi LIKE ?";
+        String sql = "SELECT MaSV, HoTen, NgaySinh, GioiTinh, DiaChi, MaKhoa FROM SINHVIEN " +
+                     "WHERE HoTen LIKE ? OR MaSV LIKE ? OR DiaChi LIKE ?";
 
         try (Connection conn = DBConnection.getConnection(); 
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(1, "%" + name + "%");
-            ps.setString(2, "%" + name + "%");
-            ps.setString(3, "%" + name + "%");
+            String key = "%" + (name == null ? "" : name.trim()) + "%";
+            ps.setString(1, key);
+            ps.setString(2, key);
+            ps.setString(3, key);
+
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    String maSV = rs.getString("MaSV");
-                    String hoTen = rs.getString("HoTen");
-                    Date ngaySinh = rs.getDate("NgaySinh");
-                    boolean gioiTinh = rs.getBoolean("GioiTinh");
-                    String diaChi = rs.getString("DiaChi");
-                    String maKhoa = rs.getString("MaKhoa");
-
-                    ds.add(new SinhVien(maSV, hoTen, ngaySinh, gioiTinh, diaChi, maKhoa));
+                    ds.add(new SinhVien(
+                            rs.getString("MaSV"),
+                            rs.getString("HoTen"),
+                            rs.getDate("NgaySinh"),
+                            rs.getBoolean("GioiTinh"),
+                            rs.getString("DiaChi"),
+                            rs.getString("MaKhoa")
+                    ));
                 }
             }
         } catch (SQLException e) {
@@ -150,7 +162,9 @@ public class SinhVienDao {
     }
 
     public boolean exists(String maSV) {
-        String sql = "SELECT * FROM SinhVien WHERE MaSV = ?";
+        if (maSV == null) return false;
+        String sql = "SELECT 1 FROM SINHVIEN WHERE MaSV = ?";
+        
         try (Connection conn = DBConnection.getConnection(); 
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, maSV.trim());
@@ -178,9 +192,8 @@ public class SinhVienDao {
     }
 
     // =========================================================================
-    // TÍNH NĂNG MỚI: PHÂN TRANG VÀ TÌM KIẾM CHO SQL SERVER
+    // TRUY VẤN PHÂN TRANG KẾT HỢP TÌM KIẾM (SQL Server)
     // =========================================================================
-
     public List<SinhVien> findByPageAndKeyword(String keyword, int page, int pageSize) throws ClassNotFoundException {
         List<SinhVien> ds = new ArrayList<>();
         int offset = (page - 1) * pageSize;
@@ -204,23 +217,26 @@ public class SinhVienDao {
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    String maSV = rs.getString("MaSV");
-                    String hoTen = rs.getString("HoTen");
-                    Date ngaySinh = rs.getDate("NgaySinh");
-                    boolean gioiTinh = rs.getBoolean("GioiTinh");
-                    String diaChi = rs.getString("DiaChi");
-                    String maKhoa = rs.getString("MaKhoa");
-
-                    ds.add(new SinhVien(maSV, hoTen, ngaySinh, gioiTinh, diaChi, maKhoa));
+                    ds.add(new SinhVien(
+                            rs.getString("MaSV"),
+                            rs.getString("HoTen"),
+                            rs.getDate("NgaySinh"),
+                            rs.getBoolean("GioiTinh"),
+                            rs.getString("DiaChi"),
+                            rs.getString("MaKhoa")
+                    ));
                 }
             }
         } catch (SQLException e) {
-            System.out.println("Lỗi khi truy vấn phân trang SinhVien: " + e.getMessage());
+            System.out.println("Lỗi truy vấn phân trang: " + e.getMessage());
             e.printStackTrace();
         }
         return ds;
     }
 
+    // =========================================================================
+    // ĐẾM TỔNG BẢN GHI DỰA THEO TỪ KHÓA TÌM KIẾM
+    // =========================================================================
     public int countByKeyword(String keyword) throws ClassNotFoundException {
         String sql = "SELECT COUNT(*) FROM SINHVIEN WHERE MaSV LIKE ? OR HoTen LIKE ? OR DiaChi LIKE ? OR MaKhoa LIKE ?";
 

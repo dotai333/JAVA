@@ -15,19 +15,23 @@ public class SinhVien {
 
     private String maSV;
     private String hoTen;
-    private Date NgaySinh;
+    private Date ngaySinh;
     private boolean gioiTinh;
     private String diaChi;
     private String maKhoa;
+
+    // Constructor mặc định (cần thiết cho JavaBean/Framework)
+    public SinhVien() {
+    }
 
     public SinhVien(String maSV) {
         this.maSV = maSV;
     }
 
-    public SinhVien(String maSV, String hoTen, Date NgaySinh, boolean gioiTinh, String diaChi, String maKhoa) {
+    public SinhVien(String maSV, String hoTen, Date ngaySinh, boolean gioiTinh, String diaChi, String maKhoa) {
         this.maSV = maSV;
         this.hoTen = hoTen;
-        this.NgaySinh = NgaySinh;
+        this.ngaySinh = ngaySinh;
         this.gioiTinh = gioiTinh;
         this.diaChi = diaChi;
         this.maKhoa = maKhoa;
@@ -50,11 +54,11 @@ public class SinhVien {
     }
 
     public Date getNgaySinh() {
-        return NgaySinh;
+        return ngaySinh;
     }
 
-    public void setNgaySinh(Date NgaySinh) {
-        this.NgaySinh = NgaySinh;
+    public void setNgaySinh(Date ngaySinh) {
+        this.ngaySinh = ngaySinh;
     }
 
     public boolean isGioiTinh() {
@@ -83,7 +87,9 @@ public class SinhVien {
 
     @Override
     public String toString() {
-       return this.maSV.trim()+"-"+this.hoTen ;
+        String id = (maSV != null) ? maSV.trim() : "";
+        String name = (hoTen != null) ? hoTen.trim() : "";
+        return id + " - " + name;
     }
 
 }

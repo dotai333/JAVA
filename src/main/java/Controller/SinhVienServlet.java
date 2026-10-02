@@ -28,7 +28,7 @@ public class SinhVienServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
 
         String action = request.getParameter("action");
-        if (action == null || action.isEmpty()) {
+        if (action == null || action.trim().isEmpty()) {
             action = "list";
         }
 
@@ -76,6 +76,11 @@ public class SinhVienServlet extends HttpServlet {
 
     private void hienThiDanhSachPhanTrang(HttpServletRequest request, HttpServletResponse response) 
             throws Exception {
+        String action = request.getParameter("action");
+        if (action == null || action.trim().isEmpty()) {
+            action = "list";
+        }
+
         String keyword = request.getParameter("keyword");
         if (keyword == null) {
             keyword = "";
@@ -108,43 +113,34 @@ public class SinhVienServlet extends HttpServlet {
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("totalRecords", totalRecords);
         request.setAttribute("keyword", keyword);
+        request.setAttribute("action", action); // Bổ sung để JSP giữ nguyên action
 
+        // LƯU Ý: Kiểm tra lại chính xác đường dẫn thư mục chứa file sinhvien.jsp trong project của bạn
         request.getRequestDispatcher("/view/sinhvien.jsp").forward(request, response);
     }
 
-    // =========================================================================
-    // CHỈNH SỬA TẠI ĐÂY: HÀM SHOW FORM THÊM MỚI
-    // =========================================================================
     private void showAddForm(HttpServletRequest request, HttpServletResponse response) 
             throws Exception {
         List<Khoa> dsKhoa = khoaDao.findAll();
         request.setAttribute("dsKhoa", dsKhoa);
-        request.setAttribute("isEdit", false); // Đánh dấu là chế độ Thêm mới
+        request.setAttribute("isEdit", false);
         
-        // Điều hướng tới file dùng chung form-sinhvien.jsp
         request.getRequestDispatcher("/view/form-sinhvien.jsp").forward(request, response);
     }
 
-    // =========================================================================
-    // CHỈNH SỬA TẠI ĐÂY: HÀM SHOW FORM CẬP NHẬT
-    // =========================================================================
     private void showEditForm(HttpServletRequest request, HttpServletResponse response) 
             throws Exception {
         String maSV = request.getParameter("maSV");
         SinhVien sv = sinhVienDao.findById(maSV);
         List<Khoa> dsKhoa = khoaDao.findAll();
 
-        request.setAttribute("sv", sv); // Đặt tên là "sv" để khớp với JSP (${sv.maSV})
+        request.setAttribute("sv", sv);
         request.setAttribute("dsKhoa", dsKhoa);
-        request.setAttribute("isEdit", true); // Đánh dấu là chế độ Cập nhật
+        request.setAttribute("isEdit", true);
         
-        // Điều hướng tới file dùng chung form-sinhvien.jsp
         request.getRequestDispatcher("/view/form-sinhvien.jsp").forward(request, response);
     }
 
-    // =========================================================================
-    // CHỈNH SỬA TẠI ĐÂY: HÀM XỬ LÝ THÊM SINH VIÊN (BỔ SUNG KIỂM TRA TRÙNG MÃ)
-    // =========================================================================
     private void insertSinhVien(HttpServletRequest request, HttpServletResponse response) 
             throws Exception {
         String maSV = request.getParameter("maSV");
@@ -154,13 +150,11 @@ public class SinhVienServlet extends HttpServlet {
         String diaChi = request.getParameter("diaChi");
         String maKhoa = request.getParameter("maKhoa");
 
-        // Validate dữ liệu trống
         if (maSV == null || maSV.trim().isEmpty() || hoTen == null || hoTen.trim().isEmpty()) {
             response.sendRedirect(request.getContextPath() + "/sinhvien?action=add&error=empty");
             return;
         }
 
-        // Kiểm tra trùng mã sinh viên
         if (sinhVienDao.exists(maSV)) {
             response.sendRedirect(request.getContextPath() + "/sinhvien?action=add&error=duplicate");
             return;
